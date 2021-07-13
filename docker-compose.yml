@@ -1,0 +1,12 @@
+version: '3'
+
+services: 
+    mock-server:
+        image: mockserver/mockserver
+        command: -logLevel INFO -serverPort 1080
+        ports: 
+            - 1080:1080
+        environment:
+            MOCKSERVER_INITIALIZATION_JSON_PATH: /config/init.json    
+        volumes:
+            - ./config:/config

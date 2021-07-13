@@ -16,6 +16,14 @@ export default function Home() {
           </a>
         </h1>
 
+        <div className="card bordered rounded-none">
+          <div className="card-body bg-white">
+            <h3 className="card-title text-black">Title</h3>
+          </div>
+
+        </div>
+
+
         <p className="mt-3 text-2xl">
           Get started by editing{' '}
           <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
