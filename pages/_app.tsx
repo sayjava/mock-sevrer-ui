@@ -4,7 +4,7 @@ import 'codemirror/theme/material.css';
 
 import { Layout, Menu } from 'antd';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 function MyApp({ Component, pageProps }) {
   return (
