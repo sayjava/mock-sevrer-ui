@@ -83,6 +83,6 @@ const fillCustomer = async (max = 20) => {
     }
 }
 
-fillUsers()
+// fillUsers()
 fillHellos()
 fillCustomer()

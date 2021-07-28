@@ -30,37 +30,5 @@
       },
       "body": "Customer endpoints"
     }
-  },
-  {
-    "httpRequest": {
-      "path": "/users/sayjava",
-      "queryStringParameters": {
-        "device": ["iphone", "motorola"],
-        "faang": ["google", "twitter"]
-      },
-      "headers": {
-        "x-id": ["an_id_to_user"],
-        "session-id": ["session_id"]
-      }
-    },
-    "httpResponse": {
-      "headers": {
-        "Content-Type": ["application/json"],
-        "access-control-expose-headers": [
-          "Allow, Content-Encoding",
-          " Content-Type, ETag"
-        ],
-        "version": ["3.2"],
-        "connection": ["keep-alive"]
-      },
-      "body": {
-        "login": "sayjava",
-        "id": 66904,
-        "node_id": "MDQ6VXNlcjY2OTA0",
-        "avatar_url": "https://avatars.githubusercontent.com/u/66904?v=4",
-        "gravatar_id": "",
-        "url": "https://api.github.com/users/sayjava"
-      }
-    }
   }
 ]
