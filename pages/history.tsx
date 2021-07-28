@@ -2,8 +2,6 @@ import React from 'react'
 import { Table, Tag, Space, Tooltip, Typography, Button } from 'antd';
 import Link from 'next/link';
 import {
-    CheckCircleOutlined,
-    CloseCircleOutlined,
     SelectOutlined,
     ApiOutlined,
     PlusOutlined
@@ -11,16 +9,7 @@ import {
 
 import { createSocket } from '../lib/logs'
 import Log from '../components/Log';
-
-
-
-const SocketState = ({ connected }) => {
-    if (!connected) {
-        return <Tag icon={<CloseCircleOutlined />} color="error">Not Connected</Tag>
-    }
-
-    return <Tag icon={<CheckCircleOutlined />} color="success">Connected</Tag>
-}
+import SocketState from '../components/SocketState';
 
 export default class LogsView extends React.Component {
     private socket: WebSocket = null;
@@ -29,6 +18,7 @@ export default class LogsView extends React.Component {
         {
             title: '',
             dataIndex: 'proxy',
+            width: "5%",
             render: (_, record) => {
                 if (record.proxy) {
                     const [host] = record.request.headers['Host'] || []
@@ -44,16 +34,19 @@ export default class LogsView extends React.Component {
             title: 'Timestamp',
             dataIndex: 'timestamp',
             key: 'timestamp',
+            width: "15%",
         },
         {
             title: 'Method',
             dataIndex: ['request', 'method'],
             key: 'id',
+            width: "10%",
         },
         {
             title: 'User-Agent',
             dataIndex: ['request', 'path'],
             ellipsis: true,
+            width: "15%",
             render: (_, record) => {
                 if (record.request.headers['Host']) {
                     return record.request.headers['User-Agent'][0]
@@ -90,6 +83,7 @@ export default class LogsView extends React.Component {
         {
             title: 'Status',
             dataIndex: 'request.path',
+            width: "10%",
             render: (_, record) => {
 
                 const renderTag = (statusCode: any) => {
