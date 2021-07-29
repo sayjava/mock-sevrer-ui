@@ -67,7 +67,7 @@ export default () => {
     }
 
     return <Space direction="vertical">
-        <SocketState connected={state.connected} />
+        {/* <SocketState connected={state.connected} /> */}
         <Table
             columns={columns}
             dataSource={state.logs}
