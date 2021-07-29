@@ -22,17 +22,37 @@ export default () => {
         }
     }
 
+    const clearLogs = async () => {
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}/clear`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    path: "/customer/*"
+                })
+            })
+
+            if (res.ok) {
+                message.success('Request logs cleared')
+            } else {
+                message.warning('Could not clear logs')
+            }
+
+        } catch (error) {
+            message.error(`${error.message}`)
+        }
+    }
+
     return <Row justify="space-between" align="middle">
         <Col>
             <SocketState connected={state.connected} />
         </Col>
         <Col>
             <Space>
-                {/* <Popconfirm
-                    title="This will clear all server logs" onConfirm={resetLogs}
+                <Popconfirm
+                    title="This will clear server history" onConfirm={clearLogs}
                     placement="topLeft" okText="Yes" cancelText="No">
                     <Button type="dashed">Clear Logs</Button>
-                </Popconfirm> */}
+                </Popconfirm>
                 <Popconfirm
                     title="This reset the server, logs and expectations" onConfirm={resetServer}
                     placement="topLeft" okText="Yes" cancelText="No">
