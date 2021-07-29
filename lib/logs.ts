@@ -4,10 +4,6 @@ export interface EntryStore {
   error?: null;
 }
 
-const port = 1080;
-const secure = "ws";
-const host = "localhost";
-
 export interface Log {
   timestamp: string;
   request: {
@@ -118,7 +114,10 @@ const getProxyRequest = ({ request, proxies }) => {
   return null;
 };
 
-export const mapToLogs = ({ proxiedRequests, logMessages }): Array<Log> => {
+export const mapToLogs = ({
+  proxiedRequests = [],
+  logMessages = [],
+}): Array<Log> => {
   const logs: Array<Log> = createRequestResponse(logMessages).map(
     (entry, i) => {
       const proxy = getProxyRequest({

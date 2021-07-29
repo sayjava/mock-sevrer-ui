@@ -20,40 +20,6 @@ const startState: LogsState = {
 
 const LogsContext = React.createContext<LogsContextState>({ state: startState, filter: () => console.error('not implemented') })
 
-
-enum ActionKind {
-    Connected = 'CONNECTED',
-    Logs = 'LOGS',
-    Error = 'ERROR',
-    Closed = 'CLOSED'
-}
-
-type Action = {
-    type: ActionKind,
-    payload?: any
-}
-
-
-const reducer = (state: LogsState, action: Action): LogsState => {
-
-    switch (action.type) {
-        case ActionKind.Connected:
-            return Object.assign({}, state, { connected: true })
-
-        case ActionKind.Error:
-            return Object.assign({}, state, { connected: false, ...action.payload })
-
-        case ActionKind.Logs:
-            return Object.assign({}, state, action.payload)
-
-        case ActionKind.Closed:
-            return Object.assign({}, state, action.payload)
-
-        default:
-            return state
-    }
-}
-
 export const useLogs = () => {
     const ctx = React.useContext(LogsContext)
     if (!ctx) {
@@ -67,44 +33,49 @@ const port = 1080
 const secure = 'ws'
 const host = 'localhost'
 
-export const LogsProvider = ({ children }) => {
-    const [state, dispatch] = useReducer<Reducer<LogsState, Action>>(reducer, startState)
-    let socket: WebSocket;
+export class LogsProvider extends React.Component<any, LogsState> {
+    socket: WebSocket
 
-    useEffect(() => {
-        // do connect here
-        socket = new WebSocket(`${secure}://${host}:${port}/_mockserver_ui_websocket`);
+    constructor(args) {
+        super(args)
 
-        socket.onerror = (error) => { dispatch({ type: ActionKind.Error, payload: { error } }) }
-        socket.onclose = () => { dispatch({ type: ActionKind.Closed, payload: { connected: false } }) }
-
-        // TODO read the filter parameters from some storage
-        socket.onopen = () => {
-            dispatch({ type: ActionKind.Connected, payload: { connected: true } })
-            setTimeout(() => socket.send(JSON.stringify({})), 0)
+        this.state = {
+            connected: false,
+            error: null,
+            logs: []
         }
-
-        socket.onmessage = (event) => {
-            dispatch({
-                type: ActionKind.Logs,
-                payload: {
-                    logs: mapToLogs(JSON.parse(event.data))
-                }
-            })
-        };
-
-        return () => {
-            socket.close()
-        }
-
-    }, [])
-
-    const filter = (values = {}) => {
-        // do filter values here
-        socket.send(JSON.stringify(values))
     }
 
-    return <LogsContext.Provider value={{ state, filter }}>
-        {children}
-    </LogsContext.Provider>
+    componentDidMount() {
+        this.socket = new WebSocket(`${secure}://${host}:${port}/_mockserver_ui_websocket`)
+        this.socket.onerror = (error) => {
+            this.setState((prevState) => {
+                return Object.assign({}, prevState, { error })
+            })
+        }
+
+        this.socket.onopen = () => {
+            setTimeout(() => this.socket.send(JSON.stringify({})), 10)
+            this.setState((prevState) => {
+                return Object.assign({}, prevState, { connected: true })
+            })
+        }
+
+        this.socket.onmessage = (event) => {
+            this.setState((prevState) => {
+                return Object.assign({}, prevState, { logs: mapToLogs(JSON.parse(event.data)) })
+            })
+        }
+    }
+
+    filter(values = {}) {
+        this.socket.send(JSON.stringify(values))
+    }
+
+    render() {
+        const { state } = this
+        return <LogsContext.Provider value={{ state, filter: (v) => this.filter(v) }}>
+            {this.props.children}
+        </LogsContext.Provider>
+    }
 }
