@@ -68,13 +68,13 @@ const fillCustomer = async (max = 20) => {
     try {
       await axios(
         url, {
-        method: randomMethod(),
-        headers: {
-          cookie: `Token=${Math.random() * 100};`,
-          'x-customer': randomFaang()
-        },
-        data: randomBody()
-      }
+          method: randomMethod(),
+          headers: {
+            cookie: `Token=${Math.random() * 100};`,
+            'x-customer': randomFaang()
+          },
+          data: randomBody()
+        }
       )
     } catch (e) {
       console.error(url, e.message)

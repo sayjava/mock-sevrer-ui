@@ -1,5 +1,5 @@
 import React from 'react'
-import Filter from '../components/Filter';
+import Filter from '../components/Filter/Filter';
 import History from '../components/History/History';
 import { LogsProvider } from "../components/LogsProvider"
 
