@@ -35,6 +35,43 @@ export interface Log {
   };
 }
 
+export interface Expectation {
+  id: any;
+  timestamp?: any;
+  httpRequest: {
+    method?: string;
+    path?: string;
+    headers?: any;
+    body?: any;
+    pathParameters?: any;
+    queryStringParameters?: any;
+    cookies?: any;
+    socketAddress?: any;
+  };
+  httpResponse: {
+    delay?: {
+      description: string;
+      timeUnit: string;
+      value: number;
+    };
+    reasonPhrase?: string;
+    statusCode?: number;
+    body?: any;
+    headers?: any;
+    cookies?: any;
+    connectionOptions?: any;
+  };
+  times?: {
+    remainingTimes?: number;
+    unlimited?: boolean;
+  };
+  timeToLive?: {
+    timeUnit: any;
+    timeToLive: number;
+    unlimited: boolean;
+  };
+}
+
 const extractRequest = (values: Array<any>) => {
   const request = values.find((val) => {
     return (

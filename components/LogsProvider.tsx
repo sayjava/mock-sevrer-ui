@@ -4,6 +4,7 @@ import { Log, mapToLogs } from '../lib/logs'
 export interface LogsState {
     connected: boolean,
     logs: Array<Log>,
+    expectations: Array<any>,
     error: null
 }
 
@@ -14,6 +15,7 @@ interface LogsContextState {
 
 const startState: LogsState = {
     logs: [],
+    expectations: [],
     error: null,
     connected: false
 }
@@ -42,7 +44,8 @@ export class LogsProvider extends React.Component<any, LogsState> {
         this.state = {
             connected: false,
             error: null,
-            logs: []
+            logs: [],
+            expectations: []
         }
     }
 
@@ -63,7 +66,9 @@ export class LogsProvider extends React.Component<any, LogsState> {
 
         this.socket.onmessage = (event) => {
             this.setState((prevState) => {
-                return Object.assign({}, prevState, { logs: mapToLogs(JSON.parse(event.data)) })
+                const data = JSON.parse(event.data)
+                const expectations = data.activeExpectations.map(exp => exp.value).reverse()
+                return Object.assign({}, prevState, { logs: mapToLogs(data), expectations })
             })
         }
     }

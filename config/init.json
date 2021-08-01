@@ -4,6 +4,11 @@
       "path": "/hello/{id}",
       "pathParameters": {
         "id": ["[A-Z0-9\\-]+"]
+      },
+      "queryStringParameters": {
+        "id": ["[A-Z0-9\\-]+"],
+        "p": ["[A-Z0-9\\-]+"],
+        "t": ["[A-Z0-9\\-]+"]
       }
     },
     "httpResponse": {
@@ -17,18 +22,59 @@
   },
   {
     "httpRequest": {
-      "path": "/customer/{customerId}",
+      "path": "/country/sports",
       "pathParameters": {
         "customerId": ["[A-Z0-9\\-]+"]
+      },
+      "queryStringParameters": {
+        "id": ["[A-Z0-9\\-]+"],
+        "p": ["[A-Z0-9\\-]+"],
+        "t": ["[A-Z0-9\\-]+"]
+      },
+      "body": {
+        "deal": "casino",
+        "britain": "EU"
       }
     },
     "httpResponse": {
+      "statusCode": 504,
       "headers": {
         "Content-Type": ["application/json"],
         "Accept-Encoding": ["gzip", "deflate", "br"],
         "Content-length": ["100"]
       },
-      "body": "Customer endpoints"
+      "body": {
+        "english": "language",
+        "locale": "en-GB"
+      }
+    },
+    "timeToLive": {
+      "timeToLive": 100000,
+      "unlimited": false
+    },
+    "times": {
+      "remainingTimes": 10
+    }
+  },
+  {
+    "httpRequest": {
+      "secure": true,
+      "keepAlive": true,
+      "method": "POST",
+      "path": "/hashtag",
+      "body": {
+        "di": "pi",
+        "si": "xi"
+      }
+    },
+    "httpResponse": {
+      "statusCode": 201,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "Accept-Encoding": ["gzip", "deflate", "br"],
+        "Content-length": ["100"]
+      },
+      "body": ["twitter", "google", "facebook", "apple"]
     }
   }
 ]

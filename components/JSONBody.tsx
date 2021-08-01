@@ -1,6 +1,5 @@
 
 import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { Card } from 'antd'
 
 export default ({ body }) => {
 
@@ -14,7 +13,8 @@ export default ({ body }) => {
             options={{
                 mode: 'json',
                 theme: 'material',
-                lineNumbers: true
+                lineNumbers: true,
+                readOnly: true
             }}
         />
     </div>
