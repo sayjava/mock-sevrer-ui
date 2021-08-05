@@ -4,8 +4,9 @@ import { Button, Space, Table, Tooltip } from 'antd';
 import { ApiOutlined, PlusOutlined } from '@ant-design/icons';
 import StatusCode from "./StatusCode";
 import RequestPath from "./RequestPath";
-import SocketState from "../SocketState";
 import LogView from "../Log";
+import { useState } from "react";
+import Import from "../Expectations/Import";
 
 const columns = [
     {
@@ -61,28 +62,23 @@ const columns = [
 
 export default () => {
     const { state } = useLogs()
+    const [selections, setSelections] = useState([])
 
-    const createMock = (record) => {
-        window.alert(`Create Mock, ${record.timestamp}`)
+    const historySelection: any = {
+        selectedRowKeys: selections,
+        onChange: setSelections,
+        type: 'checkbox'
     }
 
     return <Space direction="vertical">
-        {/* <SocketState connected={state.connected} /> */}
+        <Import selections={selections} />
         <Table
             columns={columns}
             dataSource={state.logs}
             pagination={false}
-            rowSelection={{ type: 'checkbox' }}
+            rowSelection={historySelection}
             expandable={{
-                expandedRowRender: record => <div>
-                    {!record.expectation && <div style={{ padding: "10px" }}>
-                        <Button
-                            type="dashed"
-                            icon={<PlusOutlined />}
-                            onClick={() => createMock(record)}> Create Mock </Button>
-                    </div>}
-                    <LogView log={record} />
-                </div>
+                expandedRowRender: record => <LogView log={record} />
             }}
         >
         </Table>

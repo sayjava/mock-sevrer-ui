@@ -67,7 +67,7 @@ export class LogsProvider extends React.Component<any, LogsState> {
         this.socket.onmessage = (event) => {
             this.setState((prevState) => {
                 const data = JSON.parse(event.data)
-                const expectations = data.activeExpectations.map(exp => exp.value).reverse()
+                const expectations = (data.activeExpectations || []).map(exp => exp.value).reverse()
                 return Object.assign({}, prevState, { logs: mapToLogs(data), expectations })
             })
         }

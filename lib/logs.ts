@@ -5,6 +5,8 @@ export interface EntryStore {
 }
 
 export interface Log {
+  id?: string;
+  key?: string;
   timestamp: string;
   request: {
     path: string;

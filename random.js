@@ -29,7 +29,7 @@ const randomBody = () => {
   }
 }
 
-const fillHellos = async (max = 20) => {
+const fillHellos = async (max) => {
   for (let i = 0; i <= max; i++) {
     const url = i % 2 === 0 ? `${BASE_URL}/hello/${i}` : `${BASE_URL}/hello`
     try {
@@ -42,39 +42,20 @@ const fillHellos = async (max = 20) => {
   }
 }
 
-// const fillUsers = async (max = 20) => {
-//   for (let i = 0; i <= max; i++) {
-//     const url = `${BASE_URL}/users/sayjava?faang=${randomFaang()}&device=${randomDevice()}`
-//     try {
-//       await axios(
-//         url, {
-//           method: randomMethod(),
-//           headers: {
-//             cookie: `Token=${Math.random() * 100};`,
-//             'x-customer': randomFaang()
-//           },
-//           data: randomBody()
-//         }
-//       )
-//     } catch (e) {
-//       console.error(url, e.message)
-//     }
-//   }
-// }
 
-const fillCustomer = async (max = 20) => {
+const fillCustomer = async (max) => {
   for (let i = 0; i <= max; i++) {
     const url = `${BASE_URL}/customer/${i}?device=${randomDevice()}`
     try {
       await axios(
         url, {
-          method: randomMethod(),
-          headers: {
-            cookie: `Token=${Math.random() * 100};`,
-            'x-customer': randomFaang()
-          },
-          data: randomBody()
-        }
+        method: randomMethod(),
+        headers: {
+          cookie: `Token=${Math.random() * 100};`,
+          'x-customer': randomFaang()
+        },
+        data: randomBody()
+      }
       )
     } catch (e) {
       console.error(url, e.message)
@@ -82,6 +63,5 @@ const fillCustomer = async (max = 20) => {
   }
 }
 
-// fillUsers()
-fillHellos()
-fillCustomer()
+fillHellos(10)
+fillCustomer(10)

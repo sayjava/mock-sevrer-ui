@@ -1,27 +1,6 @@
 [
   {
     "httpRequest": {
-      "path": "/hello/{id}",
-      "pathParameters": {
-        "id": ["[A-Z0-9\\-]+"]
-      },
-      "queryStringParameters": {
-        "id": ["[A-Z0-9\\-]+"],
-        "p": ["[A-Z0-9\\-]+"],
-        "t": ["[A-Z0-9\\-]+"]
-      }
-    },
-    "httpResponse": {
-      "headers": {
-        "Content-Type": ["application/json"],
-        "Accept-Encoding": ["gzip", "deflate", "br"],
-        "Content-length": ["100"]
-      },
-      "body": "say something hello"
-    }
-  },
-  {
-    "httpRequest": {
       "path": "/country/sports",
       "pathParameters": {
         "customerId": ["[A-Z0-9\\-]+"]
@@ -75,6 +54,43 @@
         "Content-length": ["100"]
       },
       "body": ["twitter", "google", "facebook", "apple"]
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/hello/\\d+"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "Accept-Encoding": ["gzip", "deflate", "br"]
+      },
+      "body": ["twitter", "google", "facebook", "apple"]
+    }
+  },
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/customer/\\d+"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"],
+        "Accept-Encoding": ["gzip", "deflate", "br"]
+      },
+      "body": {
+        "departure": "evidence",
+        "tabloid": "relief",
+        "bigebn": "demostrate",
+        "promises": ["somepeople", "want to"],
+        "dancing": {
+          "comic": "success",
+          "stipped": 1
+        }
+      }
     }
   }
 ]
