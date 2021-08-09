@@ -1,22 +1,21 @@
-import { Tag } from 'antd';
+import { Tag } from 'antd'
 
 export default ({ record }) => {
-
     const renderTag = (statusCode: any) => {
         if (statusCode === 404) {
-            return <Tag color="purple" >{statusCode}</Tag>
+            return <Tag color="purple">{statusCode}</Tag>
         }
 
         if (statusCode >= 500) {
-            return <Tag color="error" >{statusCode}</Tag>
+            return <Tag color="error">{statusCode}</Tag>
         }
 
         if (statusCode >= 400 && statusCode < 500) {
-            return <Tag color="warning" >{statusCode}</Tag>
+            return <Tag color="warning">{statusCode}</Tag>
         }
 
         if (statusCode <= 400) {
-            return <Tag color="success" >{statusCode}</Tag>
+            return <Tag color="success">{statusCode}</Tag>
         }
 
         return <Tag>{statusCode}</Tag>

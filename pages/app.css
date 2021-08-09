@@ -1,3 +1,7 @@
 .create-code-view .CodeMirror {
     height: 600px;
 }
+
+.site-layout-content {
+    display: flex;
+}
