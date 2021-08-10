@@ -1,53 +1,49 @@
 import { Alert, Button, notification, Space } from 'antd'
 import { useRef, useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
+import { expectation as api, Expectation } from '../../lib/api'
 
-export default ({ onDone }) => {
+const DEFAULT_EXPECTATION: Expectation = {
+    httpRequest: {
+        path: '/hello',
+    },
+    httpResponse: {
+        statusCode: 200,
+        body: {
+            message: 'Howdy',
+        },
+    },
+}
+
+export default ({ onDone, expectation = DEFAULT_EXPECTATION }) => {
     const editor = useRef()
     const [error, setError] = useState(null)
 
-    let expectation = JSON.stringify(
-        {
-            httpRequest: {
-                path: '/hello',
-            },
-            httpResponse: {
-                statusCode: 200,
-                body: {
-                    message: 'Howdy',
-                },
-            },
-        },
-        null,
-        2
-    )
+    let jsonValue = JSON.stringify(expectation, null, 2)
 
     const onCodeChange = (e, v, value) => {
-        expectation = value
+        jsonValue = value
     }
 
     const createExpectation = async () => {
         try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}/expectation`,
-                {
-                    method: 'PUT',
-                    body: expectation,
-                }
-            )
+            let description = 'Expectation created'
+            const exp = JSON.parse(jsonValue)
 
-            if (res.ok) {
-                notification.success({
-                    message: 'Success',
-                    description: 'Expectation created',
-                    placement: 'topLeft',
-                    duration: 5,
-                })
-                onDone()
+            if (Array.isArray(exp)) {
+                description = 'Expectations created'
+                await api.batchCreate(exp)
             } else {
-                const body = await res.text()
-                setError(body.split('\n').join(''))
+                await api.create(exp)
             }
+
+            notification.success({
+                message: 'Success',
+                description,
+                placement: 'topLeft',
+                duration: 3,
+            })
+            onDone()
         } catch (error) {
             setError(error.toString().split('\n'))
         }
@@ -70,7 +66,7 @@ export default ({ onDone }) => {
                 )}
                 <CodeMirror
                     ref={editor}
-                    value={expectation}
+                    value={jsonValue}
                     onChange={onCodeChange}
                     options={{
                         mode: 'json',
@@ -80,7 +76,7 @@ export default ({ onDone }) => {
                     className="create-code-view"
                 />
                 <Button type="primary" onClick={createExpectation}>
-                    Create Expectation
+                    Save
                 </Button>
             </Space>
         </div>

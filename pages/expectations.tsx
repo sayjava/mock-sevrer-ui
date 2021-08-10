@@ -1,12 +1,37 @@
 import React from 'react'
-import { Button, Drawer, Space } from 'antd'
+import { Button, Space } from 'antd'
 import { PlusSquareOutlined } from '@ant-design/icons'
 import List from '../components/Expectations/List'
 import {
     EditExpectationProvider,
     ExpectationsProvider,
+    useEditExpectations,
 } from '../components/Expectations/Provider'
-import Create from '../components/Expectations/Create'
+
+const NewExpectation = () => {
+    const DEFAULT_EXPECTATION = {
+        httpRequest: {
+            path: '/hello',
+        },
+        httpResponse: {
+            statusCode: 200,
+            body: {
+                message: 'Howdy',
+            },
+        },
+    }
+
+    const { create } = useEditExpectations()
+    return (
+        <Button
+            icon={<PlusSquareOutlined />}
+            type="dashed"
+            onClick={() => create(DEFAULT_EXPECTATION)}
+        >
+            New Expectation
+        </Button>
+    )
+}
 
 export default class extends React.Component {
     state = { showCreateView: false }
@@ -29,22 +54,7 @@ export default class extends React.Component {
                             margin: 'auto',
                         }}
                     >
-                        {/* <Button type="dashed" icon={<PlusSquareOutlined />} onClick={() => this.createView(true)}>
-                        New Expectation
-                    </Button>
-                    <Drawer>
-                        <Create onDone={() => this.createView(false)} />
-                    </Drawer>
-                    <Drawer
-                        title="New Expectation"
-                        width={480}
-                        closable={false}
-                        onClose={() => this.createView(false)}
-                        visible={this.state.showCreateView}
-                        placement="left"
-                    >
-                        <Create onDone={() => this.createView(false)} />
-                    </Drawer> */}
+                        <NewExpectation />
                         <List />
                     </Space>
                 </EditExpectationProvider>

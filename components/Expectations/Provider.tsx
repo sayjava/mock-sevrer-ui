@@ -2,6 +2,7 @@ import { Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Create from './Create'
 import Expectation from './Expectation'
+import { expectation as api } from '../../lib/api'
 
 const MOCK_SERVER_URL = `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}`
 
@@ -11,29 +12,30 @@ export interface ExpectationState {
 }
 
 export interface Expectation {
-    id: string
+    id?: string
+    priority?: number
     httpRequest: {
         path: string
-        method: string
-        pathParameters: any
-        queryStringParameters: any
-        cookies: any
-        headers: any
-        body: any
+        method?: string
+        pathParameters?: any
+        queryStringParameters?: any
+        cookies?: any
+        headers?: any
+        body?: any
     }
     httpResponse: {
-        statusCode: number
-        headers: any
-        body: any
-        cookies: any
-        delay: number
-        connectionOptions: any
+        statusCode?: number
+        headers?: any
+        body?: any
+        cookies?: any
+        delay?: number
+        connectionOptions?: any
     }
-    times: {
+    times?: {
         unlimited: boolean
         remainingTimes: number
     }
-    timeToLive: {
+    timeToLive?: {
         unlimited: boolean
     }
 }
@@ -74,21 +76,35 @@ export const useEditExpectations = () => {
 }
 
 export const EditExpectationProvider = ({ children }) => {
-    const { state: expState, load } = useExpectations()
+    const { load } = useExpectations()
     const [state, setState] = useState({ expectation: null, errors: null })
 
     const createExp = (expectation: Expectation) => {
         setState({ expectation, errors: null })
     }
-    const deleteExp = (expectation: Expectation) => {
-        console.log(`Lets delete - - - - >  ${expectation.id}`)
-        load()
+
+    const deleteExp = async (expectation: Expectation) => {
+        await api.delete(expectation)
+        await load()
     }
+
     const updateExp = (expectation: Expectation) => {
         setState({ expectation, errors: null })
     }
+
     const cloneExp = (expectation: Expectation) => {
-        setState({ expectation, errors: null })
+        const newExp = Object.assign({}, expectation)
+        delete newExp.id
+        setState({ expectation: newExp, errors: null })
+    }
+
+    const onDrawerDone = async () => {
+        try {
+            await load()
+            setState({ errors: null, expectation: null })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -102,8 +118,8 @@ export const EditExpectationProvider = ({ children }) => {
         >
             <>
                 <Drawer
-                    title="New Expectation"
-                    width={480}
+                    title="Expectation Editor"
+                    width={580}
                     closable={false}
                     onClose={() =>
                         setState({ expectation: null, errors: null })
@@ -112,9 +128,8 @@ export const EditExpectationProvider = ({ children }) => {
                     placement="left"
                 >
                     <Create
-                        onDone={() =>
-                            setState({ errors: null, expectation: null })
-                        }
+                        expectation={state.expectation || {}}
+                        onDone={onDrawerDone}
                     />
                 </Drawer>
                 {children}
