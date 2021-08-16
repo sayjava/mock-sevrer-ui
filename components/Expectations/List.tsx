@@ -1,4 +1,4 @@
-import { Alert, Empty, Space } from 'antd'
+import { Alert, Empty, Space, Collapse, Tag } from 'antd'
 import { useExpectations } from './Provider'
 import Expectation from './Expectation'
 
@@ -8,6 +8,15 @@ export default () => {
     } = useExpectations()
 
     const isEmpty = expectations.length === 0 && !error
+
+    const PanelHeader = ({ exp }) => {
+        return (
+            <Space>
+                <Tag color="blue">{exp.httpRequest.method || 'GET'}</Tag>
+                <span>{exp.httpRequest.path}</span>
+            </Space>
+        )
+    }
 
     return (
         <Space direction="vertical" style={{ width: '100%' }}>
@@ -20,11 +29,17 @@ export default () => {
                     showIcon
                 />
             )}
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                {expectations.map(exp => (
-                    <Expectation key={exp.id} expectation={exp} />
+
+            <Collapse>
+                {expectations.map((exp) => (
+                    <Collapse.Panel
+                        key={exp.id}
+                        header={<PanelHeader exp={exp} />}
+                    >
+                        <Expectation expectation={exp} />
+                    </Collapse.Panel>
                 ))}
-            </Space>
+            </Collapse>
         </Space>
     )
 }

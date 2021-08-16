@@ -31,7 +31,7 @@ export default () => {
                 {
                     method: 'PUT',
                     body: JSON.stringify({
-                        path: '/customer/*',
+                        method: '(GET|POST|DELETE|OPTIONS|PATCH|PUT|HEAD)',
                     }),
                 }
             )

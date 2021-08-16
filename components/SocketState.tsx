@@ -11,9 +11,5 @@ export default ({ connected }) => {
         )
     }
 
-    return (
-        <Tag icon={<CheckCircleOutlined />} color="success">
-            Connected
-        </Tag>
-    )
+    return null
 }
