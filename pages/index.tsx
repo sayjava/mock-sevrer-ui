@@ -24,14 +24,13 @@ export default () => {
                                 <ServerControls />
                             </Col>
                         </Row>
+                        <Divider />
+                        <div style={{ padding: '10px 0' }}>
+                            <Filter />
+                        </div>
+                        <History />
                     </EditExpectationProvider>
                 </ExpectationsProvider>
-
-                <Divider />
-                <div style={{ padding: '10px 0' }}>
-                    <Filter />
-                </div>
-                <History />
             </LogsProvider>
         </div>
     )

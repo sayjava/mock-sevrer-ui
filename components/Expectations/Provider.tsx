@@ -2,7 +2,7 @@ import { Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Create from './Create'
 import Expectation from './Expectation'
-import { expectation as api, expectation } from '../../lib/api'
+import { expectation as api } from '../../lib/api'
 
 const MOCK_SERVER_URL = `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}`
 
