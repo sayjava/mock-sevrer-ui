@@ -205,6 +205,7 @@ export const ExpectationsProvider = ({ children }) => {
     }
 
     return (
+        // @ts-ignore
         <ExpectationsContext.Provider value={{ state, load }}>
             {children}
         </ExpectationsContext.Provider>

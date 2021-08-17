@@ -9,6 +9,7 @@ export default () => {
 
     const doImport = () => {
         if (refImport) {
+            // @ts-ignore
             refImport.current.click()
         }
     }

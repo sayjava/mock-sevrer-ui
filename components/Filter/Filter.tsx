@@ -12,14 +12,14 @@ export default () => {
 
     let form = useRef()
 
-    const onValuesChanged = values => {
+    const onValuesChanged = (values) => {
         const filterValues = {}
-        Object.keys(values).forEach(v => {
+        Object.keys(values).forEach((v) => {
             if (values[v]) {
                 if (Array.isArray(values[v])) {
                     filterValues[v] = values[v]
-                        .filter(vm => vm)
-                        .map(vm => {
+                        .filter((vm) => vm)
+                        .map((vm) => {
                             return {
                                 name: vm.name,
                                 values: (vm.values || '').split(','),
@@ -35,6 +35,7 @@ export default () => {
     }
 
     const reset = () => {
+        // @ts-ignore
         form.current?.resetFields()
         filter({})
     }
