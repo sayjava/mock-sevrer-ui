@@ -1,7 +1,6 @@
 import { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import {
     Button,
-    Card,
     Col,
     Divider,
     Popconfirm,
