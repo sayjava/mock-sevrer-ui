@@ -2,7 +2,7 @@ import { Drawer } from 'antd'
 import React, { useEffect, useState } from 'react'
 import Create from './Create'
 import Expectation from './Expectation'
-import { expectation as api } from '../../lib/api'
+import { expectation as api, expectation } from '../../lib/api'
 
 const MOCK_SERVER_URL = `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}`
 
@@ -60,6 +60,9 @@ interface EditExpectationContextState {
     create?: (exp: Expectation) => void
     delete?: (exp: Expectation) => void
     update?: (exp: Expectation) => void
+    batch?: (exp: Expectation[]) => void
+    reset?: () => void
+    clearLogs?: () => void
 }
 
 const EditExpectationContext = React.createContext<EditExpectationContextState>(
@@ -76,7 +79,10 @@ export const useEditExpectations = () => {
 }
 
 export const EditExpectationProvider = ({ children }) => {
-    const { load } = useExpectations()
+    const {
+        load,
+        state: { expectations },
+    } = useExpectations()
     const [state, setState] = useState({ expectation: null, errors: null })
 
     const createExp = (expectation: Expectation) => {
@@ -85,6 +91,11 @@ export const EditExpectationProvider = ({ children }) => {
 
     const deleteExp = async (expectation: Expectation) => {
         await api.delete(expectation)
+        await load()
+    }
+
+    const batchExp = async (expectations: Expectation[]) => {
+        await api.batchCreate(expectations)
         await load()
     }
 
@@ -107,6 +118,17 @@ export const EditExpectationProvider = ({ children }) => {
         }
     }
 
+    const clearLogs = async () => {
+        await api.reset()
+        await api.batchCreate(expectations)
+        await load()
+    }
+
+    const resetServer = async () => {
+        await api.reset()
+        await load()
+    }
+
     return (
         <EditExpectationContext.Provider
             value={{
@@ -114,6 +136,9 @@ export const EditExpectationProvider = ({ children }) => {
                 delete: deleteExp,
                 update: updateExp,
                 create: createExp,
+                batch: batchExp,
+                clearLogs,
+                reset: resetServer,
             }}
         >
             <>

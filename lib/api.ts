@@ -87,7 +87,7 @@ export const expectation = {
     },
 
     batchCreate: async (exps: Array<Expectation>) => {
-        exps.map(async (exp) => {
+        const prs = exps.map(async (exp) => {
             if (exp.id) {
                 try {
                     await expectation.delete(exp)
@@ -100,5 +100,20 @@ export const expectation = {
                 await expectation.create(exp)
             }
         })
+
+        return Promise.all(prs)
+    },
+
+    reset: async () => {
+        const res = await fetch(`${MOCK_SERVER_URL}/reset`, {
+            method: 'PUT',
+        })
+
+        if (res.ok) {
+            return true
+        } else {
+            const body = await res.text()
+            throw Error(body)
+        }
     },
 }

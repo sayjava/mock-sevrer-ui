@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Badge, Button, Drawer, Space } from 'antd'
+import { Badge, Button, Col, Drawer, Row, Space } from 'antd'
 import { PlusSquareOutlined } from '@ant-design/icons'
 import List from './List'
 import {
@@ -8,6 +8,8 @@ import {
     useEditExpectations,
     useExpectations,
 } from './Provider'
+import ExportExpectations from './Export'
+import FileImport from './FileImport'
 
 const NewExpectation = () => {
     const DEFAULT_EXPECTATION = {
@@ -30,7 +32,7 @@ const NewExpectation = () => {
             type="primary"
             onClick={() => create(DEFAULT_EXPECTATION)}
         >
-            New Expectation
+            New
         </Button>
     )
 }
@@ -46,37 +48,46 @@ export default () => {
     const [state, setState] = useState({ showExpectationsView: false })
 
     return (
-        <ExpectationsProvider>
-            <EditExpectationProvider>
-                <ExpectationCount>
-                    <Button
-                        type="dashed"
-                        onClick={() => setState({ showExpectationsView: true })}
-                    >
-                        Expectations
-                    </Button>
-                </ExpectationCount>
-                <Drawer
-                    title="Expectations"
-                    placement="left"
-                    width={750}
-                    closable
-                    onClose={() => setState({ showExpectationsView: false })}
-                    visible={state.showExpectationsView}
+        <>
+            <ExpectationCount>
+                <Button
+                    type="dashed"
+                    onClick={() => setState({ showExpectationsView: true })}
                 >
-                    <Space
-                        direction="vertical"
-                        style={{
-                            width: '100%',
-                            maxWidth: '960px',
-                            margin: 'auto',
-                        }}
-                    >
-                        <NewExpectation />
-                        <List />
-                    </Space>
-                </Drawer>
-            </EditExpectationProvider>
-        </ExpectationsProvider>
+                    Expectations
+                </Button>
+            </ExpectationCount>
+            <Drawer
+                title="Expectations"
+                placement="left"
+                width={750}
+                closable
+                onClose={() => setState({ showExpectationsView: false })}
+                visible={state.showExpectationsView}
+            >
+                <Space
+                    direction="vertical"
+                    style={{
+                        width: '100%',
+                        maxWidth: '960px',
+                        margin: 'auto',
+                    }}
+                >
+                    <Row justify="space-between">
+                        <Col>
+                            <Space>
+                                <NewExpectation />
+                                <FileImport />
+                            </Space>
+                        </Col>
+                        <Col>
+                            <ExportExpectations />
+                        </Col>
+                    </Row>
+
+                    <List />
+                </Space>
+            </Drawer>
+        </>
     )
 }

@@ -1,50 +1,11 @@
 import { Space, Button, Row, Col, Popconfirm, message } from 'antd'
+import { useEditExpectations } from './Expectations/Provider'
 import { useLogs } from './LogsProvider'
 import SocketState from './SocketState'
 
 export default () => {
     const { state } = useLogs()
-
-    const resetServer = async () => {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}/reset`,
-                {
-                    method: 'PUT',
-                }
-            )
-
-            if (res.ok) {
-                message.success('Server reset successful')
-            } else {
-                message.warning('Could not reset sever')
-            }
-        } catch (error) {
-            message.error(`${error.message}`)
-        }
-    }
-
-    const clearLogs = async () => {
-        try {
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_MOCK_SERVER_ENDPOINT}/clear`,
-                {
-                    method: 'PUT',
-                    body: JSON.stringify({
-                        method: '(GET|POST|DELETE|OPTIONS|PATCH|PUT|HEAD)',
-                    }),
-                }
-            )
-
-            if (res.ok) {
-                message.success('Request logs cleared')
-            } else {
-                message.warning('Could not clear logs')
-            }
-        } catch (error) {
-            message.error(`${error.message}`)
-        }
-    }
+    const edit = useEditExpectations()
 
     return (
         <Row justify="space-between" align="middle">
@@ -55,7 +16,7 @@ export default () => {
                 <Space>
                     <Popconfirm
                         title="This will clear server history"
-                        onConfirm={clearLogs}
+                        onConfirm={() => edit.clearLogs()}
                         placement="topLeft"
                         okText="Yes"
                         cancelText="No"
@@ -64,7 +25,7 @@ export default () => {
                     </Popconfirm>
                     <Popconfirm
                         title="This reset the server, logs and expectations"
-                        onConfirm={resetServer}
+                        onConfirm={() => edit.reset()}
                         placement="topLeft"
                         okText="Yes"
                         cancelText="No"
