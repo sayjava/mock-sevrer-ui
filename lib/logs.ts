@@ -37,61 +37,26 @@ export interface Log {
     }
 }
 
-export interface Expectation {
-    id: any
-    timestamp?: any
-    httpRequest: {
-        method?: string
-        path?: string
-        headers?: any
-        body?: any
-        pathParameters?: any
-        queryStringParameters?: any
-        cookies?: any
-        socketAddress?: any
-    }
-    httpResponse: {
-        delay?: {
-            description: string
-            timeUnit: string
-            value: number
-        }
-        reasonPhrase?: string
-        statusCode?: number
-        body?: any
-        headers?: any
-        cookies?: any
-        connectionOptions?: any
-    }
-    times?: {
-        remainingTimes?: number
-        unlimited?: boolean
-    }
-    timeToLive?: {
-        timeUnit: any
-        timeToLive: number
-        unlimited: boolean
-    }
-}
-
 const extractRequest = (values: Array<any>) => {
-    const request = values.find(val => {
+    const request = values.find((val) => {
         return (
             val.value.description.includes('RECEIVED_REQUEST') ||
             val.value.description.includes('FORWARDED_REQUEST')
         )
     })
 
-    const matched = request.value.messageParts.find(part => part.value.headers)
+    const matched = request.value.messageParts.find(
+        (part) => part.value.headers
+    )
     return Object.assign({}, matched.value, {
-        forwarded: !!values.find(val =>
+        forwarded: !!values.find((val) =>
             val.value.description.includes('FORWARDED_REQUEST')
         ),
     })
 }
 
 const extractExpectation = (values: Array<any>) => {
-    const expectation = values.find(val => {
+    const expectation = values.find((val) => {
         return val.value.description.includes('EXPECTATION_MATCHED')
     })
 
@@ -99,7 +64,7 @@ const extractExpectation = (values: Array<any>) => {
         return null
     }
 
-    const matched = expectation.value.messageParts.find(part => part.value.id)
+    const matched = expectation.value.messageParts.find((part) => part.value.id)
     return matched.value
 }
 
@@ -121,11 +86,11 @@ const createRequestResponse = (logs: Array<any>): Array<any> => {
 
     const requests = logs
         .filter(({ group }) => {
-            return acceptable.some(desc =>
+            return acceptable.some((desc) =>
                 group?.value?.description.includes(desc)
             )
         })
-        .map(log => {
+        .map((log) => {
             const { value } = log
             const timestamp = extractTimeStamp(log)
             const request = extractRequest(value)
@@ -142,7 +107,7 @@ const createRequestResponse = (logs: Array<any>): Array<any> => {
 }
 
 const getProxyRequest = ({ request, proxies }) => {
-    const proxied = proxies.find(proxy => {
+    const proxied = proxies.find((proxy) => {
         const methodMatches = proxy.value.method === request.method
         const pathMatches = proxy.value.path === request.path
         return methodMatches && pathMatches

@@ -1,5 +1,6 @@
 import { Col, Divider, Row } from 'antd'
 import React from 'react'
+import Head from 'next/head'
 import Expectations from '../components/Expectations/Expectations'
 import {
     EditExpectationProvider,
@@ -13,6 +14,13 @@ import ServerControls from '../components/ServerControls'
 export default () => {
     return (
         <div style={{ width: '100%', padding: '20px 0' }}>
+            <Head>
+                <title>Mock Server UI</title>
+                <meta
+                    name="viewport"
+                    content="initial-scale=1.0, width=device-width"
+                />
+            </Head>
             <LogsProvider>
                 <ExpectationsProvider>
                     <EditExpectationProvider>

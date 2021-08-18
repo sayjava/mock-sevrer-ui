@@ -34,9 +34,9 @@ export const useLogs = () => {
     return ctx
 }
 
-const port = 1080
+const port = process.env.NEXT_PUBLIC_MOCK_SERVER_PORT || 1080
 const secure = 'ws'
-const host = 'localhost'
+const host = process.env.NEXT_PUBLIC_MOCK_SERVER_WS_ENDPOINT || 'localhost'
 
 export class LogsProvider extends React.Component<any, LogsState> {
     socket: WebSocket
@@ -56,24 +56,24 @@ export class LogsProvider extends React.Component<any, LogsState> {
         this.socket = new WebSocket(
             `${secure}://${host}:${port}/_mockserver_ui_websocket`
         )
-        this.socket.onerror = error => {
-            this.setState(prevState => {
+        this.socket.onerror = (error) => {
+            this.setState((prevState) => {
                 return Object.assign({}, prevState, { error })
             })
         }
 
         this.socket.addEventListener('open', () => {
             this.socket.send(JSON.stringify({}))
-            this.setState(prevState => {
+            this.setState((prevState) => {
                 return Object.assign({}, prevState, { connected: true })
             })
         })
 
-        this.socket.addEventListener('message', event => {
-            this.setState(prevState => {
+        this.socket.addEventListener('message', (event) => {
+            this.setState((prevState) => {
                 const data = JSON.parse(event.data)
                 const expectations = (data.activeExpectations || [])
-                    .map(exp => exp.value)
+                    .map((exp) => exp.value)
                     .reverse()
                 return Object.assign({}, prevState, {
                     logs: mapToLogs(data),
@@ -82,7 +82,7 @@ export class LogsProvider extends React.Component<any, LogsState> {
             })
         })
 
-        this.socket.addEventListener('error', err => {
+        this.socket.addEventListener('error', (err) => {
             console.error('SOCKET ERROR ', err)
         })
     }
@@ -95,7 +95,7 @@ export class LogsProvider extends React.Component<any, LogsState> {
         const { state } = this
         return (
             <LogsContext.Provider
-                value={{ state, filter: v => this.filter(v) }}
+                value={{ state, filter: (v) => this.filter(v) }}
             >
                 {this.props.children}
             </LogsContext.Provider>
