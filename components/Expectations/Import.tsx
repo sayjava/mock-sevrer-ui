@@ -1,7 +1,6 @@
 import { Alert, Button, Drawer, notification, Space } from 'antd'
 import React, { useRef, useState } from 'react'
 import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { Expectation } from '../../lib/logs'
 import { useLogs } from '../LogsProvider'
 import { useEditExpectations } from './Provider'
 
@@ -20,7 +19,7 @@ export default ({ selections }) => {
     const importSelections = async () => {
         const indices = selections.map((s) => parseInt(s.match(/\d+/)[0], 10))
 
-        const exps: Array<Expectation> = indices.map((index) => {
+        const exps: Array<any> = indices.map((index) => {
             const log = Object.assign({}, logs[index])
 
             // @ts-ignore
